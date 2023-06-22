@@ -1,5 +1,5 @@
 function ImagePopup(props) {
-    const popupClass = `popup ${props.isOpen && "popup_opened"}`;
+    const popupClass = `popup ${props.card && "popup_opened"}`;
 
     return (
         <div className={`${popupClass} image`}>
