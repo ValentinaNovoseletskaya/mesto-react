@@ -7,7 +7,7 @@ export const validationSettings = {
     errorClass: 'popup__error_visible'
   };
   
-const validationProfilePopup = [
+export const inputProfilePopup = [
   {
     className: 'popup__input popup__input_type_name',
     type: 'text',
@@ -28,7 +28,7 @@ const validationProfilePopup = [
   }
 ]
 
-const validationAvatarPopup = [
+export const inputAvatarPopup = [
   {
     className: 'popup__input popup__input_type_link',
     type: 'url',
@@ -37,7 +37,7 @@ const validationAvatarPopup = [
     required: true,
   }]
 
-const validationPlacePopup = [
+export const inputPlacePopup = [
   {
     className: 'popup__input popup__input_type_name',
     type: 'text',

@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import '../index.css';
 import Header from './Header.js';
 import Main from './Main.js';
-import Footer from './Footer.js'; 
+import Footer from './Footer.js';
 import EditProfilePopup from './EditProfilePopup.js';
 import EditAvatarPopup from './EditAvatarPopup.js';
 import AddPlacePopup from './AddPlacePopup.js';
@@ -68,19 +68,18 @@ function App() {
     function handleSubmit(request) {
         setLoadingText('Сохранение...');
         request()
-          .then(() => {
-            closeAllPopups();
-          })
-          .catch((err) => {
-            console.error(`Ошибка: ${err}`);
-          })
-          .finally(() => {
-            setLoadingText(null);
-          });
-      }
+        .then(() => {
+        closeAllPopups();
+        })
+        .catch((err) => {
+        console.error(`Ошибка: ${err}`);
+        })
+        .finally(() => {
+        setLoadingText(null);
+        });
+    }
 
     function handleCardDelete(card) {
-
         function makeRequest() { 
             return api.removeCard(card._id).then(() => {
                 const newCards = cards.filter(c => c._id !== card._id);
@@ -88,8 +87,7 @@ function App() {
                 closeAllPopups();
             });
         }
-        handleSubmit(makeRequest);
-       
+        handleSubmit(makeRequest);       
     }
 
     function handleCardLike(card) {
@@ -103,7 +101,6 @@ function App() {
     }
 
     function handleUpdateUser(user) {
-
         function makeRequest() { 
             return api.editUserInfo(user).then((userData) => {
                 setCurrentUser(userData);
@@ -123,8 +120,7 @@ function App() {
         handleSubmit(makeRequest);
     }
 
-    function handleAddPlaceSubmit(card) {
-        
+    function handleAddPlaceSubmit(card) {        
         function makeRequest() { 
             return api.createNewCard(card).then((newCard) => {
                 setCards([newCard, ...cards]);

@@ -1,35 +1,58 @@
 import {useState} from 'react';
 import PopupWithForm from './PopupWithForm.js';
+import {inputPlacePopup} from '../utils/Utils.js';
 
 function AddPlacePopup (props) {
-    const [name, setName] = useState('');
-    const [link, setLink] = useState('');
-    
-    function handleNameChange(e) {
-        setName(e.target.value);
-    }
+    const [formData, setFormData] = useState({
+        placeName: '',
+        placeImage: '',
+    });
 
-    function handleLinkChange(e) {
-        setLink(e.target.value);
+    const [formErrors, setFormErrors] = useState({});
+
+    const isDisabled = () => {
+        if (
+            Object.keys(formData).length === 0 ||
+            Object.keys(formData).some(item => !formData[item] || formData[item] === '') ||
+            Object.keys(formErrors).some(item => formErrors[item] && formErrors[item] !== '' )            
+        ) { return true }         
     }
 
     function handleSubmit(e) {
-        e.preventDefault();      
+        e.preventDefault();
         props.onAddPlace({
-            name: name,
-            link: link,
+            name: formData.placeName,
+            link: formData.placeImage,
             likes: []
         });
-        setName('');
-        setLink('');
+        setFormData({
+            placeName: '',
+            placeImage: '',
+        });
     }
 
     return (
-        <PopupWithForm title='Новое место' name='place' buttonText={props.loadingText ? props.loadingText : 'Создать' }  onSubmit={handleSubmit} isOpen={props.isOpen} onClose={props.onClose}>
-            <input type="text" id="input-place" name="placeName" value={name} onChange={handleNameChange} className="popup__input popup__input_type_name" placeholder="Название" minLength="2" maxLength="30" required />
-            <span id="input-place-error"></span>
-            <input type="url" id="input-image" name="placeImage" value={link} onChange={handleLinkChange} className="popup__input popup__input_type_link" placeholder="Ссылка на картинку" required />
-            <span id="input-image-error"></span>
+        <PopupWithForm title='Новое место' name='place' buttonText={props.loadingText ? props.loadingText : 'Создать' }  onSubmit={handleSubmit} isOpen={props.isOpen} disabled={isDisabled()} onClose={props.onClose}>
+            {inputPlacePopup.map( ({type, required, name, className, placeholder, minLength, maxLength}) => {
+                return <div key={name}>
+                    <input 
+                    className={className}
+                    placeholder={placeholder}
+                    minLength={minLength}
+                    maxLength={maxLength}
+                    type={type}
+                    required={required}
+                    name={name}
+                    value={formData[name] || '' }
+                    onChange={ e=>{
+                        setFormData({...formData, [name]: e.target.value})
+                        const errorMessage = e.target.validationMessage
+                        setFormErrors({...formErrors, [name]: errorMessage || ''})
+                    } }
+                    />
+                    <span className="popup__error_visible" >{formErrors[name]}</span>
+                    </div>
+            })}
         </PopupWithForm>
     );
 }

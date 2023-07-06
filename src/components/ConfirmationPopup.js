@@ -2,7 +2,7 @@ import PopupWithForm from './PopupWithForm.js';
 
 function ConfirmationPopup(props) {    
     function handleSubmit(e) {
-        e.preventDefault();      
+        e.preventDefault();
         props.onConfirmDelete(props.card);
     }
 
