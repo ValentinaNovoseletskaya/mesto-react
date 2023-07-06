@@ -6,8 +6,10 @@ function PopupWithForm(props) {
             <div className="popup__container">
                 <button type="button" className="popup__close-button" onClick={props.onClose}></button>
                 <h2 className="popup__title">{props.title}</h2>
-                {props.children}
-                <button type="submit" className="popup__save-button">{props.buttonText}</button>
+                <form className="popup__content" onSubmit={props.onSubmit} name="form" noValidate>
+                    {props.children} 
+                    <button type="submit" className="popup__save-button">{props.buttonText}</button>   
+                </form>
             </div>
         </div>
     );
