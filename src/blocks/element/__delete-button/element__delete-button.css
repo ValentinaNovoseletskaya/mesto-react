@@ -14,7 +14,6 @@
     border: none;
     cursor: pointer;
     z-index: 1;
-    visibility: hidden;
 }
 
 .element__delete-button:hover {

@@ -1,20 +1,9 @@
-import {useEffect, useState} from 'react';
+import {useContext} from 'react';
 import Card from './Card.js';
-import {api} from '../utils/Api.js';
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
 
-function Main(props) {
-    const [cards, setCards] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
-    
-    useEffect(() => {
-        api.getAppInfo().then(([userData, initialCards]) => {
-            setCards(initialCards);
-            setCurrentUser(userData);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    }, []);
+function Main(props) {    
+    const currentUser = useContext(CurrentUserContext);    
 
     return (
         <main className="main">
@@ -32,8 +21,8 @@ function Main(props) {
                 <button type="button" onClick={props.onAddPlace} className="profile__add-button"></button>
             </section>
             <section className="elements" aria-label="Карточки мест">
-                {cards.map((card) => (
-                    <Card onCardClick={props.onCardClick} key={card._id} card={card}/> 
+                {props.cards.map((card) => (
+                    <Card onCardClick={props.onCardClick} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} key={card._id} card={card}/> 
                 ))}     
             </section>
         </main>
