@@ -9,7 +9,7 @@ function AddPlacePopup ({onAddPlace, isOpen, isLoading, onClose}) {
     });
     
     const [formErrors, setFormErrors] = useState({});
-    const formDataValues = Object.values(formData);     
+    const formDataValues = Object.values(formData);
     const isDisabled = () => {
         return formDataValues.length === 0 || formDataValues.some(item => !item) || Object.values(formErrors).some(item => item)        
     }

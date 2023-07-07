@@ -32,13 +32,14 @@ function App() {
     const [cards, setCards] = useState([]);
 
     useEffect(() => {
-        api.getAppInfo().then(([userData, initialCards]) => {
-            setCards(initialCards);
-            setCurrentUser(userData);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+        api.getAppInfo()
+            .then(([userData, initialCards]) => {
+                setCards(initialCards);
+                setCurrentUser(userData);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
 
     function handleEditAvatarClick() {
@@ -92,7 +93,7 @@ function App() {
                 closeAllPopups();
             });
         }
-        handleSubmit(makeRequest);       
+        handleSubmit(makeRequest);
     }
 
     function handleCardLike(card) {
