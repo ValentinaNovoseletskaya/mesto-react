@@ -18,8 +18,12 @@ function App() {
     useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] =
     useState(false);
-    const [loadingText, setLoadingText] =
-    useState(null);
+    const [isLoadingPlacePopup, setIsLoadingPlacePopup] =
+    useState(false);
+    const [isLoadingProfilePopup, setIsLoadingProfilePopup] =
+    useState(false);
+    const [isLoadingAvatarPopup, setIsLoadingAvatarPopup] =
+    useState(false);
     const [selectedCard, setSelectedCard] =
     useState(null);
     const [toDeleteCard, setToDeleteCard] =
@@ -66,17 +70,18 @@ function App() {
     }
 
     function handleSubmit(request) {
-        setLoadingText('Сохранение...');
         request()
-        .then(() => {
-        closeAllPopups();
-        })
-        .catch((err) => {
-        console.error(`Ошибка: ${err}`);
-        })
-        .finally(() => {
-        setLoadingText(null);
-        });
+            .then(() => {
+                closeAllPopups();
+            })
+            .catch((err) => {
+                console.error(`Ошибка: ${err}`);
+            })
+            .finally(() => {
+                setIsLoadingPlacePopup(false);
+                setIsLoadingProfilePopup(false);
+                setIsLoadingAvatarPopup(false);
+            });
     }
 
     function handleCardDelete(card) {
@@ -107,6 +112,7 @@ function App() {
                 closeAllPopups();
             });
         }
+        setIsLoadingProfilePopup(true);
         handleSubmit(makeRequest);
     }
 
@@ -117,6 +123,7 @@ function App() {
                 closeAllPopups();
             });
         }
+        setIsLoadingAvatarPopup(true);
         handleSubmit(makeRequest);
     }
 
@@ -124,9 +131,9 @@ function App() {
         function makeRequest() { 
             return api.createNewCard(card).then((newCard) => {
                 setCards([newCard, ...cards]);
-                closeAllPopups();
             });
         }
+        setIsLoadingPlacePopup(true);
         handleSubmit(makeRequest);
     }
 
@@ -138,9 +145,9 @@ function App() {
                     <Main cards={cards} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleDeleteClick} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} />
                     <Footer />
                 </div>
-                <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} loadingText={loadingText} onClose={closeAllPopups} />
-                <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} loadingText={loadingText} onClose={closeAllPopups} />
-                <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} loadingText={loadingText} onClose={closeAllPopups} />
+                <EditProfilePopup onUpdateUser={handleUpdateUser} isOpen={isEditProfilePopupOpen} isLoading={isLoadingProfilePopup} onClose={closeAllPopups} />
+                <EditAvatarPopup onUpdateAvatar={handleUpdateAvatar} isOpen={isEditAvatarPopupOpen} isLoading={isLoadingAvatarPopup} onClose={closeAllPopups} />
+                <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} isLoading={isLoadingPlacePopup} onClose={closeAllPopups} />
                 <ConfirmationPopup card={toDeleteCard} onConfirmDelete={handleCardDelete} onClose={closeAllPopups} />
                 <ImagePopup card={selectedCard} onClose={closeAllPopups} />
             </div>

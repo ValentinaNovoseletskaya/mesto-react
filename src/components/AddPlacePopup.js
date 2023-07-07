@@ -1,38 +1,37 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import PopupWithForm from './PopupWithForm.js';
-import {inputPlacePopup} from '../utils/Utils.js';
+import {inputPlacePopup} from '../utils/formsConfig.js';
 
-function AddPlacePopup (props) {
+function AddPlacePopup ({onAddPlace, isOpen, isLoading, onClose}) {
     const [formData, setFormData] = useState({
         placeName: '',
         placeImage: '',
     });
-
+    
     const [formErrors, setFormErrors] = useState({});
-
+    const formDataValues = Object.values(formData);     
     const isDisabled = () => {
-        if (
-            Object.keys(formData).length === 0 ||
-            Object.keys(formData).some(item => !formData[item] || formData[item] === '') ||
-            Object.keys(formErrors).some(item => formErrors[item] && formErrors[item] !== '' )            
-        ) { return true }         
+        return formDataValues.length === 0 || formDataValues.some(item => !item) || Object.values(formErrors).some(item => item)        
     }
 
     function handleSubmit(e) {
         e.preventDefault();
-        props.onAddPlace({
+        onAddPlace({
             name: formData.placeName,
-            link: formData.placeImage,
-            likes: []
+            link: formData.placeImage
         });
+        
+    }
+
+    useEffect(() => {
         setFormData({
             placeName: '',
             placeImage: '',
         });
-    }
+    }, [isOpen]);
 
     return (
-        <PopupWithForm title='Новое место' name='place' buttonText={props.loadingText ? props.loadingText : 'Создать' }  onSubmit={handleSubmit} isOpen={props.isOpen} disabled={isDisabled()} onClose={props.onClose}>
+        <PopupWithForm title='Новое место' name='place' buttonText={isLoading ? 'Сохранение...' : 'Создать' }  onSubmit={handleSubmit} isOpen={isOpen} disabled={isDisabled()} onClose={onClose}>
             {inputPlacePopup.map( ({type, required, name, className, placeholder, minLength, maxLength}) => {
                 return <div key={name}>
                     <input 

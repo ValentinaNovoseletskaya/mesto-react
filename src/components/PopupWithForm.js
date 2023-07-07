@@ -1,15 +1,15 @@
-function PopupWithForm(props) {
-    const popupClass = `popup ${props.isOpen && "popup_opened"}`;
-    const buttonClass = `popup__save-button ${props.disabled && "popup__save-button_disable"} `;
+function PopupWithForm({isOpen, disabled, name, title, onClose, onSubmit, children, buttonText}) {
+    const popupClass = `popup ${isOpen ? "popup_opened" : ''}`;
+    const buttonClass = `popup__save-button ${disabled ? "popup__save-button_disable" : ''} `;
     
     return (
-        <div className={`${popupClass} popup_type_${props.name}`}>
+        <div className={`${popupClass} popup_type_${name}`}>
             <div className="popup__container">
-                <button type="button" className="popup__close-button" onClick={props.onClose}></button>
-                <h2 className="popup__title">{props.title}</h2>
-                <form className="popup__content" onSubmit={props.onSubmit} name="form" noValidate>
-                    {props.children} 
-                    <button disabled={props.disabled} type="submit" className={`${buttonClass}`}>{props.buttonText}</button>   
+                <button type="button" className="popup__close-button" onClick={onClose}></button>
+                <h2 className="popup__title">{title}</h2>
+                <form className="popup__content" onSubmit={onSubmit} name="form" noValidate>
+                    {children} 
+                    <button disabled={disabled} type="submit" className={buttonClass}>{buttonText}</button>   
                 </form>
             </div>
         </div>

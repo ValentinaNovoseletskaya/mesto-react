@@ -1,28 +1,28 @@
-import {useState, useRef} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import PopupWithForm from './PopupWithForm.js';
-import {inputAvatarPopup} from '../utils/Utils.js';
+import {inputAvatarPopup} from '../utils/formsConfig.js';
 
-function EditAvatarPopup(props) {
+function EditAvatarPopup({onUpdateAvatar, isOpen, isLoading, onClose}) {
     const avatarRef = useRef('');
     const [formErrors, setFormErrors] = useState({});
 
     const isDisabled = () => {
-        if (
-            avatarRef.current.value === "" ||
-            Object.keys(formErrors).some(item => formErrors[item] && formErrors[item] !== '' )            
-        ) { return true }         
+        return avatarRef.current.value === "" || Object.values(formErrors).some(item => item)       
     }
 
     function handleSubmit(e) {
         e.preventDefault();
-        props.onUpdateAvatar({
+        onUpdateAvatar({
             avatar: avatarRef.current.value,
         });
-        avatarRef.current.value = "";
     }
 
+    useEffect(() => {
+        avatarRef.current.value = "";
+    }, [isOpen]);
+
     return (
-        <PopupWithForm title='Обновить аватар' name='avatar' buttonText={props.loadingText ? props.loadingText : 'Сохранить' } onSubmit={handleSubmit} isOpen={props.isOpen} disabled={isDisabled()} onClose={props.onClose}>
+        <PopupWithForm title='Обновить аватар' name='avatar' buttonText={isLoading ? 'Сохранение...' : 'Сохранить' } onSubmit={handleSubmit} isOpen={isOpen} disabled={isDisabled()} onClose={onClose}>
             {inputAvatarPopup.map( ({type, required, name, className, placeholder}) => {
                 return <div key={name}>
                     <input 

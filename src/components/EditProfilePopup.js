@@ -1,21 +1,17 @@
 import {useState, useContext, useEffect} from 'react';
 import PopupWithForm from './PopupWithForm.js';
 import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
-import {inputProfilePopup} from '../utils/Utils.js';
+import {inputProfilePopup} from '../utils/formsConfig.js';
 
-function EditProfilePopup(props) {
+function EditProfilePopup({onUpdateUser, isOpen, isLoading, onClose}) {
     const currentUser = useContext(CurrentUserContext);
     const [defaultValue, setDefaultValue] =  useState({});
     const [formData, setFormData] = useState({});
     const [formErrors, setFormErrors] = useState({});
-
+    const formDataKeys = Object.keys(formData);
     const isDisabled = () => {
-        if (
-            Object.keys(formData).length === 0 ||
-            Object.keys(formData).some(item => !formData[item] || formData[item] === '') ||
-            Object.keys(formData).every(item => formData[item] === defaultValue[item]) ||
-            Object.keys(formErrors).some(item => formErrors[item] && formErrors[item] !== '' )            
-        ) { return true }         
+        return formDataKeys.length === 0 || formDataKeys.some(item => !formData[item]) || formDataKeys.every(item => formData[item] === defaultValue[item]) || 
+        Object.values(formErrors).some(item => item)      
     }
 
     useEffect(() => {
@@ -27,19 +23,19 @@ function EditProfilePopup(props) {
             profileName: currentUser ? currentUser.name : '',
             profileJob: currentUser ? currentUser.about : '',
         })
-      }, [currentUser, props.isOpen]);
+      }, [currentUser, isOpen]);
  
 
     function handleSubmit(e) {
         e.preventDefault();
-        props.onUpdateUser({
+        onUpdateUser({
             name: formData.profileName,
             about: formData.profileJob,
         });
     }
 
     return (
-        <PopupWithForm title='Редактировать профиль' name='profile' onSubmit={handleSubmit} buttonText={props.loadingText ? props.loadingText : 'Сохранить' }  isOpen={props.isOpen} disabled={isDisabled()} onClose={props.onClose}>                
+        <PopupWithForm title='Редактировать профиль' name='profile' onSubmit={handleSubmit} buttonText={isLoading ? 'Сохранение...' : 'Сохранить' }  isOpen={isOpen} disabled={isDisabled()} onClose={onClose}>                
                 {inputProfilePopup.map( ({type, required, name, className, placeholder, minLength, maxLength}) => {
                 return  <div key={name}>
                     <input 
