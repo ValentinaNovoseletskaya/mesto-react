@@ -10,7 +10,6 @@ import AddPlacePopup from './AddPlacePopup.js';
 import ImagePopup from './ImagePopup.js';
 import ConfirmationPopup from './ConfirmationPopup.js';
 import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
-import InfoTooltip from './InfoTooltip.js';
 
 function App() {
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
@@ -152,7 +151,6 @@ function App() {
                 <AddPlacePopup onAddPlace={handleAddPlaceSubmit} isOpen={isAddPlacePopupOpen} isLoading={isLoadingPlacePopup} onClose={closeAllPopups} />
                 <ConfirmationPopup card={toDeleteCard} onConfirmDelete={handleCardDelete} onClose={closeAllPopups} />
                 <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-                <InfoTooltip />
             </div>
         </CurrentUserContext.Provider>
     );
